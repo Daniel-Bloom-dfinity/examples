@@ -34,7 +34,7 @@ actor HttpCounter {
     headers: [HeaderField];
     body: Blob;
     streaming_strategy: ?StreamingStrategy;
-    upgrade: ?Bool;
+    upgrade: Bool;
   };
 
   type HttpRequest = {
@@ -62,21 +62,21 @@ actor HttpCounter {
             arbitrary_data = "start";
           }
         });
-        upgrade = ?false;
+        upgrade = false;
       }};
       case ("GET", false, _) {{
         status_code = 200;
         headers = [ ("content-type", "text/plain") ];
         body = Text.encodeUtf8("Counter is " # Nat.toText(counter) # "\n" # req.url # "\n");
         streaming_strategy = null;
-        upgrade = null;
+        upgrade = false;
       }};
       case ("GET", true, _) {{
         status_code = 200;
         headers = [ ("content-type", "text/plain"), ("content-encoding", "gzip") ];
         body = "\1f\8b\08\00\98\02\1b\62\00\03\2b\2c\4d\2d\aa\e4\02\00\d6\80\2b\05\06\00\00\00";
         streaming_strategy = null;
-        upgrade = null;
+        upgrade = false;
       }};
 
       case ("POST", _, _) {{
@@ -84,14 +84,14 @@ actor HttpCounter {
         headers = [];
         body = "";
         streaming_strategy = null;
-        upgrade = ?true;
+        upgrade = true;
       }};
       case _ {{
         status_code = 400;
         headers = [];
         body = "Invalid request";
         streaming_strategy = null;
-        upgrade = null;
+        upgrade = false;
       }};
     }
   };
@@ -105,7 +105,7 @@ actor HttpCounter {
           headers = [ ("content-type", "text/plain") ];
           body = Text.encodeUtf8("Counter updated to " # Nat.toText(counter) # "\n");
           streaming_strategy = null;
-          upgrade = null;
+          upgrade = false;
         }
       };
       case ("POST", true) {
@@ -116,7 +116,7 @@ actor HttpCounter {
           body = "\1f\8b\08\00\37\02\1b\62\00\03\2b\2d\48\49\2c\49\e5\02\00\a8\da\91\6c\07\00\00\00";
           
           streaming_strategy = null;
-          upgrade = null;
+          upgrade = false;
         }
       };
       case _ {{
@@ -124,7 +124,7 @@ actor HttpCounter {
         headers = [];
         body = "Invalid request";
         streaming_strategy = null;
-        upgrade = null;
+        upgrade = false;
       }};
     }
   };
