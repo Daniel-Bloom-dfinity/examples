@@ -2,7 +2,7 @@ import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 import Array "mo:base/Array";
 import Option "mo:base/Option";
-import Prim "mo:prim";
+import Prim "mo:⛔";
 import Prelude "mo:base/Prelude";
 
 
@@ -138,7 +138,6 @@ actor HttpCounter {
       case "next" {{
         body = Text.encodeUtf8(Nat.toText(counter));
         token = ?{arbitrary_data = "last"};
-
       }};
       case "last" {{
         body = Text.encodeUtf8(" streaming\n");
